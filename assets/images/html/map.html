@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Analisis Rute Cepat</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+
+    <!-- Font Awesome & Material Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        html, body { margin: 0; padding: 0; }
+        #map { width: 100vw; height: 100vh; }
+        .popup-title { font-weight: bold; }
+        .popup-coords { color: #666; }
+        .leaflet-routing-container { display: none; } /* Sembunyikan panel rute default */
+        .leaflet-control-layers-toggle {
+            background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMCIgaGVpZ2h0PSIzMCIgdmlld0JveD0iMCAwIDMwIDMwIj48cGF0aCBkPSJNNCAyMEwxNiA4bDExIDEyLTExIDEyTDMgMjEuNzV6bTAtOUwxNiA1bDggNi04IDctOC02em0wLTlMMTYgMmw1IDMgNSA0LTExIDctMTEtN3oiIGZpbGw9IiM1NTUiLz48L3N2Zz4=);
+            width: 36px !important;
+            height: 36px !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <!-- JS Libraries -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+
+    <script>
+        // 1. Inisialisasi Peta dan Firebase
+        const map = L.map('map').setView([-2.563383, 140.708422], 12);
+        const osm_tile = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7tRu7FVoKkFCCFf5S_n8Q5JvOGNQfz1U",
+            authDomain: "reactnative2025-4c5af.firebaseapp.com",
+            databaseURL: "https://reactnative2025-4c5af-default-rtdb.firebaseio.com",
+            projectId: "reactnative2025-4c5af",
+            storageBucket: "reactnative2025-4c5af.firebasestorage.app",
+            messagingSenderId: "331173768729",
+            appId: "1:331173768729:web:b5eaf6cd4f0fc6df8e0488"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // 2. Data Titik Lokasi
+        const disasterPoints = [
+            { name: "Dok 9", coords: [-2.518047, 140.731901] },
+            { name: "Jl. Pipa", coords: [-2.554540, 140.712817] },
+            { name: "Jl Tasangkapura", coords: [-2.559872, 140.707618] },
+            { name: "pych", coords: [-2.600938, 140.684414] },
+            { name: "jl. tobati holtekamp", coords: [-2.611848, 140.725374] }
+        ];
+        const policePoints = [
+            { name: "Pos Polisi Sylen", coords: [-2.596498, 140.687310] },
+            { name: "Pos Polisi Holtekam", coords: [-2.629070, 140.776117] },
+            { name: "Polsek Jayapura Utara", coords: [-2.521899, 140.724663] },
+            { name: "Pos Polisi", coords: [-2.546743, 140.713325] },
+            { name: "Polsek Jayapura Selatan", coords: [-2.567311, 140.697391] }
+        ];
+        const hospitalPoints = [
+            { name: "RSUD DOK 2", coords: [-2.534958, 140.709995] },
+            { name: "RS Angkatan Laut", coords: [-2.568260, 140.710187] },
+            { name: "RS Bhayangkara", coords: [-2.591029, 140.674586] },
+            { name: "RS Ramela", coords: [-2.652429, 140.805383] },
+            { name: "RS Provitas", coords: [-2.538183, 140.715392] }
+        ];
+
+        // 3. Ikon Kustom
+        const crimeIcon = L.icon({ iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-gold.png', shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png', iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41] });
+        const policeIcon = L.divIcon({ html: '<span class="material-icons" style="color: #00008b; font-size: 30px;">local_police</span>', className: '', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -28] });
+        const hospitalIcon = L.divIcon({ html: '<span class="material-icons" style="color: #b22222; font-size: 30px;">local_hospital</span>', className: '', iconSize: [30, 30], iconAnchor: [15, 30], popupAnchor: [0, -28] });
+
+        // 4. Layer Groups (untuk kontrol legenda)
+        const crimeLayer = L.layerGroup().addTo(map);
+        const policeLayer = L.layerGroup().addTo(map);
+        const hospitalLayer = L.layerGroup().addTo(map);
+        const firebaseLayer = L.layerGroup().addTo(map);
+        const policeRouteLayer = L.layerGroup().addTo(map);
+        const hospitalRouteLayer = L.layerGroup().addTo(map);
+        
+        // Fungsi untuk menambahkan marker ke layer
+        function addMarkerToLayer(point, icon, layer) {
+            const marker = L.marker(point.coords, { icon: icon });
+            marker.bindPopup(`<div class="popup-title">${point.name}</div><div class="popup-coords">${point.coords.join(', ')}</div>`);
+            marker.addTo(layer);
+        }
+
+        disasterPoints.forEach(p => addMarkerToLayer(p, crimeIcon, crimeLayer));
+        policePoints.forEach(p => addMarkerToLayer(p, policeIcon, policeLayer));
+        hospitalPoints.forEach(p => addMarkerToLayer(p, hospitalIcon, hospitalLayer));
+
+        // 5. Logika Rute
+        function getDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371; // km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        }
+
+        function findNearest(point, candidates) {
+            return candidates.reduce((prev, curr) => {
+                let prevDist = getDistance(point.coords[0], point.coords[1], prev.coords[0], prev.coords[1]);
+                let currDist = getDistance(point.coords[0], point.coords[1], curr.coords[0], curr.coords[1]);
+                return (currDist < prevDist) ? curr : prev;
+            });
+        }
+
+        disasterPoints.forEach(disaster => {
+            const nearestPolice = findNearest(disaster, policePoints);
+            const nearestHospital = findNearest(disaster, hospitalPoints);
+
+            // Buat kontrol rute tapi jangan langsung tambahkan ke map
+            const policeRouter = L.Routing.control({
+                waypoints: [L.latLng(disaster.coords), L.latLng(nearestPolice.coords)],
+                createMarker: () => null,
+            }).on('routesfound', function(e) {
+                const route = e.routes[0];
+                L.polyline(route.coordinates, { color: '#007BFF', weight: 5, opacity: 0.8 }).addTo(policeRouteLayer);
+            });
+            
+            const hospitalRouter = L.Routing.control({
+                waypoints: [L.latLng(disaster.coords), L.latLng(nearestHospital.coords)],
+                createMarker: () => null,
+            }).on('routesfound', function(e) {
+                const route = e.routes[0];
+                L.polyline(route.coordinates, { color: '#DC3545', weight: 5, opacity: 0.8 }).addTo(hospitalRouteLayer);
+            });
+
+            // Tambahkan router ke map untuk memicu kalkulasi, lalu hapus
+            policeRouter.addTo(map);
+            map.removeControl(policeRouter);
+
+            hospitalRouter.addTo(map);
+            map.removeControl(hospitalRouter);
+        });
+
+        // 6. Data dari Firebase
+        const pointsRef = database.ref("/points");
+        pointsRef.on('value', (snapshot) => {
+            firebaseLayer.clearLayers(); // Hapus marker lama sebelum menambah yang baru
+            const data = snapshot.val();
+            if (data) {
+                Object.keys(data).forEach(key => {
+                    const point = data[key];
+                    if (point.coordinates) {
+                        const coords = point.coordinates.split(",").map(parseFloat);
+                        const marker = L.marker(coords);
+                        marker.bindPopup(
+                            `<div class="popup-title">${point.name}</div>` +
+                            `<div class="popup-coords">${coords.join(', ')}</div>` +
+                            `<button onclick="deletePoint('${key}')" style="color:red; background:none; border:none; cursor:pointer;">Hapus</button>`
+                        );
+                        marker.addTo(firebaseLayer);
+                    }
+                });
+            }
+        });
+        
+        function deletePoint(key) {
+            if (confirm("Yakin akan menghapus titik ini?")) {
+                database.ref("/points").child(key).remove();
+            }
+        }
+
+        // 7. Kontrol Legenda (Layer Control)
+        const baseMaps = { "Peta OpenStreetMap": osm_tile };
+        const overlayMaps = {
+            "Rute ke Polisi": policeRouteLayer,
+            "Rute ke RS": hospitalRouteLayer,
+            "Titik Kejahatan": crimeLayer,
+            "Pos Polisi": policeLayer,
+            "Rumah Sakit": hospitalLayer,
+        };
+        L.control.layers(baseMaps, overlayMaps, { collapsed: false }).addTo(map);
+
+    </script>
+</body>
+</html>

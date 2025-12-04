@@ -1,98 +1,214 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { useThemeColor } from '@/hooks/use-theme-color';
+import { Ionicons as Icon } from '@expo/vector-icons';
+import { Image } from 'expo-image';
 import { Link } from 'expo-router';
+import { StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function HomeScreen() {
+
+  const iconColor = useThemeColor({}, 'text');
+
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      headerBackgroundColor={{ light: '#003c8bff', dark: '#003c8bff' }}
       headerImage={
         <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
+          source={require('@/assets/images/Japrax-AmanMap.png')}
+          style={styles.headerLogo}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+      }
+    >
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
+      {/* HERO SECTION */}
+      <ThemedView style={styles.hero}>
+        <ThemedText type="title" style={styles.heroTitle}>
+          Japrax AmanMap
+        </ThemedText>
+        <ThemedText style={styles.heroSubtitle}>
+          Jalan aman, hati tenang ✨
         </ThemedText>
       </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
+
+      {/* QUICK PANELS */}
+      <ThemedView style={styles.quickRow}>
+        <ThemedView style={styles.quickCard}>
+          <Icon name="warning" size={32} color="#C62828" />
+          <ThemedText style={styles.quickText}>Zona Rawan</ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.quickCard}>
+          <Icon name="shield" size={32} color="#C62828" />
+          <ThemedText style={styles.quickText}>Rute Polisi</ThemedText>
+        </ThemedView>
+
+        <ThemedView style={styles.quickCard}>
+          <Icon name="medkit" size={32} color="#C62828" />
+          <ThemedText style={styles.quickText}>Rute RS</ThemedText>
+        </ThemedView>
+      </ThemedView>
+
+      {/* FUNFACT */}
+      <ThemedView style={styles.sectionWide}>
+        <ThemedView style={styles.sectionHeader}>
+          <Icon name="chatbubbles" size={24} color={iconColor} />
+          <ThemedText type="subtitle" style={styles.sectionTitle}>Ko Harus Tau!</ThemedText>
+        </ThemedView>
+
+        <ThemedText style={styles.sectionText}>
+          Banyak tempat di Jayapura yang kalau malam rawan mabuk atau pungli.
+          Biasanya cuma dengar dari cerita, tapi sekarang ko bisa cek langsung di peta.
         </ThemedText>
       </ThemedView>
+
+      {/* BACKGROUND + TUJUAN (2 Columns) */}
+      <ThemedView style={styles.rowTwo}>
+
+        {/* LATAR BELAKANG */}
+        <ThemedView style={styles.colCard}>
+          <ThemedView style={styles.sectionHeader}>
+            <Icon name="school" size={24} color={iconColor} />
+            <ThemedText type="subtitle" style={styles.sectionTitle}>Latar Belakang</ThemedText>
+          </ThemedView>
+
+          <ThemedText style={styles.sectionText}>
+            Aplikasi ini memakai analisis SIG untuk melihat pola risiko, area rawan,
+            dan jalur aman. Tujuannya supaya masyarakat Jayapura bisa dapat
+            informasi keamanan yang jelas dan mudah dimengerti.
+          </ThemedText>
+        </ThemedView>
+
+        {/* TUJUAN */}
+        <ThemedView style={styles.colCard}>
+          <ThemedView style={styles.sectionHeader}>
+            <Icon name="list" size={24} color={iconColor} />
+            <ThemedText type="subtitle" style={styles.sectionTitle}>Tujuan</ThemedText>
+          </ThemedView>
+
+          <ThemedText style={styles.sectionBullet}>• Melihat area rawan kejahatan.</ThemedText>
+          <ThemedText style={styles.sectionBullet}>• Menemukan rute prioritas ke pos polisi.</ThemedText>
+          <ThemedText style={styles.sectionBullet}>• Mendapat rute tercepat ke fasilitas kesehatan.</ThemedText>
+        </ThemedView>
+
+      </ThemedView>
+
+
+      {/* CTA */}
+      <Link href="/mapwebview" asChild>
+      <TouchableOpacity style={styles.ctaButton}>
+        <ThemedText style={styles.ctaText}>Mulai Jelajahi Peta</ThemedText>
+      </TouchableOpacity>
+      </Link>
+
     </ParallaxScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  headerLogo: {
+    height: 210,
+    width: 260,
+    position: 'absolute',
+    bottom: -10,
+  },
+
+  hero: {
+    alignItems: 'center',
+    paddingVertical: 30,
+    backgroundColor: '#003c8bff'
+  },
+  heroTitle: {
+    fontSize: 37,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
+  heroSubtitle: {
+    marginTop: 8,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#b62121ff',
+  },
+
+  quickRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 16,
+    marginTop: -20,
+  },
+  quickCard: {
+    flex: 1,
+    backgroundColor: '#003c8bff',
+    paddingVertical: 10,
+    marginHorizontal: 4,
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  quickText: {
+    marginTop: 8,
+    color: '#F5F6FA',
+    fontSize: 14,
+  },
+
+  section: {
+    backgroundColor: '#003c8bff',
+    margin: 16,
+    padding: 16,
+    borderRadius: 14,
+  },
+  sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
+    gap: 10,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '600',
+    color: '#43c7d6ff',
+  },
+  sectionText: {
+    color: '#FFFFFFCC',
+    fontSize: 15,
+    lineHeight: 22,
+  },
+  sectionBullet: {
+    color: '#FFFFFFCC',
+    fontSize: 15,
+    marginTop: 6,
+  },
+
+  ctaButton: {
+    marginHorizontal: 16,
+    marginBottom: 40,
+    paddingVertical: 16,
+    backgroundColor: '#C62828',
+    borderRadius: 12,
+    alignItems: 'center',
+  },
+  ctaText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  sectionWide: {
+    backgroundColor: '#003c8bff',
+    marginHorizontal: 1,
+    padding: 20,
+    borderRadius: 14,
+  },
+
+  rowTwo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+
+  colCard: {
+    flex: 1,
+    backgroundColor: '#003c8bff',
+    padding: 15,
+    marginHorizontal: 5,
+    borderRadius: 12,
   },
 });

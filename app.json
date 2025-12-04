@@ -28,6 +28,12 @@
     "plugins": [
       "expo-router",
       [
+        "expo-maps",
+        {
+          "googleMapsApiKey": "AIzaSyA7tRu7FVoKkFCCFf5S_n8Q5JvOGNQfz1U"
+        }
+      ],
+      [
         "expo-splash-screen",
         {
           "image": "./assets/images/splash-icon.png",
