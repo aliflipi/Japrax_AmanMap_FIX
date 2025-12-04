@@ -1,50 +1,79 @@
-# Welcome to your Expo app 👋
+# 📍 Japrax AmanMap 2025
+Aplikasi pemetaan keamanan untuk wilayah **Kota Jayapura**.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Japrax AmanMap adalah aplikasi mobile yang membantu masyarakat melihat **area rawan**, **rute aman**, dan akses cepat menuju fasilitas penting seperti **pos polisi** dan **rumah sakit**. Aplikasi ini dirancang agar masyarakat dapat merasa lebih aman ketika bepergian, terutama pada malam hari.
 
-## Get started
+---
 
-1. Install dependencies
+## 📝 Deskripsi Produk
+**Japrax AmanMap** merupakan aplikasi pemetaan berbasis **SIG (Sistem Informasi Geografis)** yang menyajikan informasi spasial terkait:
 
-   ```bash
-   npm install
-   ```
+- Zona rawan kejahatan
+- Jalur aman
+- Rute prioritas menuju pos polisi
+- Rute tercepat menuju rumah sakit
 
-2. Start the app
+Aplikasi ini dibuat dengan tampilan yang sederhana dan langsung pada inti informasi. Pengguna dapat mengetahui kondisi keamanan suatu wilayah tanpa bergantung pada cerita atau asumsi. Dengan demikian, aplikasi ini berfungsi sebagai alat bantu navigasi aman bagi masyarakat Jayapura.
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🧩 Komponen Pembangun Aplikasi
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### **1. Frontend (Mobile)**
+Dibangun menggunakan:
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **React Native (Expo)**
+- **Typescript**
+- **Expo Router**
+- **Expo Image**
+- **Ionicons / @expo/vector-icons**
+- **Custom Themed Components**:
+  - `ThemedView`
+  - `ThemedText`
+  - `useThemeColor`
+- **ParallaxScrollView** sebagai komponen tampilan beranda
 
-## Get a fresh project
+Fitur UI utama:
+- Hero section  
+- Quick Feature Panel (Zona Rawan, Rute Polisi, Rute RS)  
+- Funfact "Ko Harus Tau" dengan gaya bahasa Jayapura  
+- Layout 2 kolom (Latar Belakang & Tujuan)  
+- Tombol CTA menuju halaman peta  
 
-When you're ready, run:
+---
 
-```bash
-npm run reset-project
-```
+### **2. Backend & GIS (Opsional)**
+Jika dikembangkan lebih lanjut:
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- **Node.js** untuk API backend
+- **GeoServer / PostGIS** untuk hosting data spasial
+- **Leaflet.js** (untuk versi web atau kebutuhan peta tambahan)
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+### **3. Data Spasial yang Digunakan**
+- Titik zona rawan kejahatan malam hari
+- Lokasi pos polisi terdekat
+- Lokasi rumah sakit dan fasilitas kesehatan
+- Jalur aman berdasarkan kondisi wilayah
+- Jaringan jalan Kota Jayapura
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+---
 
-## Join the community
+## 🗂️ Sumber Data
+Data dalam aplikasi diperoleh dari:
 
-Join our community of developers creating universal apps.
+- **Wawancara online** dengan teman yang tinggal di Jayapura  
+- **OpenStreetMap (OSM)**
+- Observasi wilayah (data kategorisasi zona rawan)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+
+## 📸 Screenshots
+![home](https://github.com/user-attachments/assets/44aa46f0-253a-4ac6-ab3f-b4667e5b3263)
+![Map](https://github.com/user-attachments/assets/88bcccc4-edbc-47bf-bd70-0452d3550ec2)
+![gmap](https://github.com/user-attachments/assets/c99205e2-8ef1-46d2-96c3-5bd5d8b6fca5)
+
+
+
+
