@@ -26,12 +26,6 @@ Dibangun menggunakan:
 - **Typescript**
 - **Expo Router**
 - **Expo Image**
-- **Ionicons / @expo/vector-icons**
-- **Custom Themed Components**:
-  - `ThemedView`
-  - `ThemedText`
-  - `useThemeColor`
-- **ParallaxScrollView** sebagai komponen tampilan beranda
 
 Fitur UI utama:
 - Hero section  
@@ -43,10 +37,7 @@ Fitur UI utama:
 ---
 
 ### **2. Backend & GIS (Opsional)**
-Jika dikembangkan lebih lanjut:
-
 - **Node.js** untuk API backend
-- **GeoServer / PostGIS** untuk hosting data spasial
 - **Leaflet.js** (untuk versi web atau kebutuhan peta tambahan)
 
 ---
