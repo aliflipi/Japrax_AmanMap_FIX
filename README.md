@@ -1,7 +1,7 @@
 # 📍 Japrax AmanMap 2025
 Aplikasi pemetaan keamanan untuk wilayah **Kota Jayapura**.
 
-Japrax AmanMap adalah aplikasi mobile yang membantu masyarakat melihat **area rawan**, **rute aman**, dan akses cepat menuju fasilitas penting seperti **pos polisi** dan **rumah sakit**. Aplikasi ini dirancang agar masyarakat dapat merasa lebih aman ketika bepergian, terutama pada malam hari.
+Japrax AmanMap adalah aplikasi mobile yang membantu masyarakat melihat **area rawan**, **akses** cepat menuju fasilitas penting seperti **pos polisi** dan **rumah sakit**. Aplikasi ini dirancang agar masyarakat dapat merasa lebih aman ketika bepergian, terutama pada malam hari.
 
 ---
 
